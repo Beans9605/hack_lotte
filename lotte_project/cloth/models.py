@@ -1,5 +1,5 @@
 from django.db import models
-
+from mypage.models import CustomUser
 # Create your models here.
 
 class StandardFit_up (models.Model) :
