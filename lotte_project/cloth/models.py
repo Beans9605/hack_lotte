@@ -28,8 +28,10 @@ class StandardFit_down(models.Model) :
 
 class UpCloth (models.Model) :
     name = models.CharField(max_length=20, unique=True)
+    clothImage = models.ImageField()
     multyFitType = models.ManyToManyField(StandardFit_up)
 
 class DownCloth(models.Model) :
     name = models.CharField(max_length=20, unique=True)
+    clothImage = models.ImageField()
     multyFitType = models.ManyToManyField(StandardFit_down)
