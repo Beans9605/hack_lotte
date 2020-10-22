@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'cloth.apps.ClothConfig',
     'mypage.apps.MypageConfig',
     'shopping.apps.ShoppingConfig',
-
 ]
 
 MIDDLEWARE = [
@@ -81,10 +80,9 @@ WSGI_APPLICATION = 'lotte_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -129,4 +127,3 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
 #이미지 파일 건으로 혹시 몰라 써놓음 필요시 주석 제거 필요없을시 삭제ㅠ (최종인) 
-
