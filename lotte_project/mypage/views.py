@@ -106,7 +106,6 @@ def edit_custom(request): # 내 정보 수정(채혜민)
     if request.method == "POST":
         form = ProfileForm(request.POST)
         if form.is_valid():
-            form.cleaned_data
             user = form.save()
             # 이미지 수정 어떻게?
             # 수정 내용 디테일 페이지에 반영 안됨/모델도 수정 안되는 것으로 확인
