@@ -50,7 +50,7 @@ def register(request): #회원가입(최종인)
         return render(request, "mypage/register.html")
     
 def login(request): #로그인(최종인)
-    # 안됨 - 404 /쿼리에 해당하는 객체 없다고 뜸
+    # 안됨 - 404 /쿼리에 해당하는 객체 없다고 뜸(채혜민)
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST['password']
@@ -89,7 +89,7 @@ def upload(request): #이미지 업로드 테스트(최종인)
         form = ImageForm()
     return render(request, 'mypage/index.html', {'form': form})
 
-def detail_custom(request):
+def detail_custom(request): #내 정보 상세 페이지(채혜민)
     username = request.user.username 
     # username을 받아오는 다른 방법?
     user = get_object_or_404(CustomUser, username = username)
@@ -97,7 +97,7 @@ def detail_custom(request):
     return render(request, "mypage/detail.html", context)
 
 @login_required
-def edit_custom(request):
+def edit_custom(request): # 내 정보 수정(채혜민)
     # get current user 
     username = request.user.username
     user = get_object_or_404(CustomUser, username = username)
