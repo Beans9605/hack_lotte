@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password #(최종인)
 from .models import CustomUser #(최종인)
 from .forms import ImageForm, ProfileForm
-
+# 고영빈 수정
 # Create your views here.
 def home(request):
     return redirect("login")
@@ -24,8 +24,17 @@ def register(request): #회원가입(최종인)
         #face_img=request.POST['face_img'] #여기에 사진 업로드 하는거를 아직 고민 중(최종인)
         
 
-        if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
-            return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})
+        # 고영빈 수정 예외 처리
+        try :
+            user = CustomUser.objects.get(username = username)
+        except CustomUser.MultipleObjectsReturned :
+            msg = "중복 아이디가 존재합니다."
+            context = {'errMsg' : msg}
+        except CustomUser.DoesNotExist :
+            pass
+
+        # if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
+        #     return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})
 
         if pwd != c_pwd : #비밀번호 확인 섹션(최종인)
             return render(request, "mypage/register.html", {"err2" : "암호는 서로 일치해야 합니다."})

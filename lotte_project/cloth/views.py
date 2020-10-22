@@ -12,15 +12,25 @@ def clothHome(request) :
 
 
 def selectCloth(request) :
-    if request.method == 'POST'  :
+
+    if request.method == 'POST' :
         name = request.POST['name']
         fitId = request.POST['fitId']
-        if request.POST['clothType'] == 'up' :
-            upcloth = UpCloth.objects.filter(name=name, multyFitType=fitId)
-            return render(request, '', {'upcloth': upcloth})
-        elif request.POST['clothType'] == 'down' :
-            downcloth = DownCloth.objects.filter(name=name, multyFitType=fitId)
-            return render(request, '', {'downcloth' : downcloth})
+        clothOn = request.POST['clothOn']
+        if clothOn :
+            if request.POST['clothType'] == 'up' :
+                upcloth = UpCloth.objects.filter(name=name, multyFitType=fitId)
+                return render(request, '', {'upcloth': upcloth})
+            elif request.POST['clothType'] == 'down' :
+                downcloth = DownCloth.objects.filter(name=name, multyFitType=fitId)
+                return render(request, '', {'downcloth' : downcloth})
+        else :
+            if request.POST['clothType'] == 'up' :
+                upcloth = UpCloth.objects.filter(name=name, multyFitType=fitId)
+                return render(request, '', {"upcloth" : upcloth})
+            elif request.POST['clothType'] == 'down' :
+                downcloth = DownCloth.objects.filter(name=name, multyFitType=fitId)
+                return render(request, '', {'downcloth' :downcloth})
     else :
         return render(request, "")
-    
+
