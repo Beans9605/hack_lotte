@@ -17,10 +17,10 @@ def register(request): #회원가입(최종인)
         email = request.POST['email']
         pwd = request.POST['password']
         c_pwd = request.POST['check_password']
-        #weight = request.POST['weight']  #weight부터 faceLength까지 어떻게 처리해야할지 고민 중(최종인)
-        #height = request.POST['height']
-        #fit = request.POST['fit']
-        #faceLength= request.POST['faceLength']
+        weight = request.POST['weight']  #weight부터 faceLength까지 어떻게 처리해야할지 고민 중(최종인)
+        height = request.POST['height']
+        fit = request.POST['fit']
+        faceLength= request.POST['faceLength']
         #face_img=request.POST['face_img'] #여기에 사진 업로드 하는거를 아직 고민 중(최종인)
         
 
@@ -35,10 +35,10 @@ def register(request): #회원가입(최종인)
             first_name = first_name,
             last_name = last_name,
             email = email,
-            #weight = weight,
-            #height = height,
-            #fit = fit,
-            #faceLength = faceLength,
+            weight = weight,
+            height = height,
+            fit = fit,
+            faceLength = faceLength,
             #face_img = face_img
         )
         customUser.set_password(pwd) #암호화해서 저장(해쉬...?(최종인))
@@ -50,7 +50,7 @@ def register(request): #회원가입(최종인)
         return render(request, "mypage/register.html")
     
 def login(request): #로그인(최종인)
-    # 안됨 - 404 /쿼리에 해당하는 객체 없다고 뜸(채혜민)
+    # 안됨 - 404 /쿼리에 해당하는 객체 없다고 뜸(채혜민) --> 해결됨(최종인)
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST['password']
@@ -59,7 +59,9 @@ def login(request): #로그인(최종인)
 
         if check_password(password, user.password):
             request.session['user'] = user.username
-            return redirect('home')
+            
+            return redirect('detail-custom') #로그인 성공하면 입력한 정보를 뜨게 하고 싶은데 반영된 정보가 안보임
+
 
         else:
             return render(request, "mypage/login.html", {"err": "패스워드가 틀렸습니다."})
