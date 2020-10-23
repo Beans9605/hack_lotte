@@ -23,9 +23,17 @@ def register(request): #회원가입(최종인)
         faceLength= request.POST['faceLength']
         #face_img=request.POST['face_img'] #여기에 사진 업로드 하는거를 아직 고민 중(최종인)
         
+        #예외 처리
+        try :
+            user = CustomUser.objects.get(username = username)
+        except CustomUser.MultipleObjectsReturned :
+            msg = "중복 아이디가 존재합니다."
+            context = {'errMsg' : msg}
+        except CustomUser.DoesNotExist :
+            pass
 
-        if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
-            return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})
+        #if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
+        #    return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})
 
         if pwd != c_pwd : #비밀번호 확인 섹션(최종인)
             return render(request, "mypage/register.html", {"err2" : "암호는 서로 일치해야 합니다."})
@@ -60,7 +68,7 @@ def login(request): #로그인(최종인)
         if check_password(password, user.password):
             request.session['user'] = user.username
             
-            return redirect('detail-custom') #로그인 성공하면 입력한 정보를 뜨게 하고 싶은데 반영된 정보가 안보임
+            return redirect('detail_custom') #로그인 성공하면 입력한 정보를 뜨게 하고 싶은데 반영된 정보가 안보임
 
 
         else:
