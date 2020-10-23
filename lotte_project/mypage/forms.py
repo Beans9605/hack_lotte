@@ -16,7 +16,7 @@ class ProfileForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            # "face_img",
+            "face_img",
             "weight",
             "height",
             "fit",
