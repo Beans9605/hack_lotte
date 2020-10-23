@@ -1,10 +1,18 @@
 from django.db import models
+from django.db.models.deletion import SET_NULL
 from mypage.models import CustomUser
+from django.utils import timezone
 # Create your models here.
+
+class ClothType (models.Model) :
+    type = models.CharField(max_length=20)
+
+    def __str__ (self) :
+        return self.type
 
 class StandardFit_up (models.Model) :
     # 반팔 긴팔
-    clothType = models.CharField(max_length=10)
+    clothType = models.ForeignKey(ClothType, on_delete=models.SET_NULL, null=True)
     # S M L XL
     size = models.CharField(max_length=5)
     # 가슴 둘레
@@ -18,7 +26,7 @@ class StandardFit_up (models.Model) :
     
 class StandardFit_down(models.Model) :
     # 반바지 긴바지
-    clothType = models.CharField(max_length=10)
+    clothType = models.ForeignKey(ClothType, on_delete=models.SET_NULL, null=True)
     # S M L XL
     size = models.CharField(max_length=5)
     # 허리
@@ -26,12 +34,18 @@ class StandardFit_down(models.Model) :
     # 총 길이
     totalHeight = models.IntegerField()
 
-class UpCloth (models.Model) :
-    name = models.CharField(max_length=20, unique=True)
-    clothImage = models.ImageField()
-    multyFitType = models.ManyToManyField(StandardFit_up)
 
-class DownCloth(models.Model) :
+class Cloth(models.Model) :
+    sleeveType = models.BooleanField(default=True)
+    pantsType = models.BooleanField(default=False)
     name = models.CharField(max_length=20, unique=True)
-    clothImage = models.ImageField()
+    clothImage = models.ImageField(upload_to='cloth/', null=True, blank=True)
+    price = models.FloatField(default=0, null=True, blank=True)
     multyFitType = models.ManyToManyField(StandardFit_down)
+
+
+class ViewOfUser(models.Model) : 
+    look = models.IntegerField(default=0)
+    users = models.ManyToManyField(CustomUser)
+    resently = models.DateTimeField(auto_now=True)
+    product = models.ManyToManyField(Cloth)

@@ -19,4 +19,5 @@ from django.urls import path, include #(최종인)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mypage/', include('mypage.urls')), #(최종인)
+    path('cloth/', include('cloth.urls')),
 ]

@@ -130,5 +130,5 @@ STATICFILES_DIR = (
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
-#이미지 파일 건으로 혹시 몰라 써놓음 필요시 주석 제거 필요없을시 삭제ㅠ (최종인) 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+#이미지 파일 건으로 혹시 몰라 써놓음 필요시 주석 제거 필요없을시 삭제ㅠ (최종인)    

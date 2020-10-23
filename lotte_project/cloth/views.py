@@ -1,36 +1,27 @@
 from django.shortcuts import render, get_object_or_404
-from .models import UpCloth, DownCloth
+from .models import Cloth
 # Create your views here.
 
 def clothHome(request) :
-    upcloth = UpCloth.objects.all()
-    downcloth = DownCloth.objects.all()
+    cloths = Cloth.objects.all()
 
-    context = {'upcloth' : upcloth, 'downcloth' : downcloth}
+    context = {'cloths' : cloths}
 
-    return render(request, "", context)
+    return render(request, "cloth/clothHome.html", context)
 
 
 def selectCloth(request) :
 
-    if request.method == 'POST' :
+    if request.method == 'POST' and request.user :
         name = request.POST['name']
         fitId = request.POST['fitId']
-        clothOn = request.POST['clothOn']
-        if clothOn :
-            if request.POST['clothType'] == 'up' :
-                upcloth = UpCloth.objects.filter(name=name, multyFitType=fitId)
-                return render(request, '', {'upcloth': upcloth})
-            elif request.POST['clothType'] == 'down' :
-                downcloth = DownCloth.objects.filter(name=name, multyFitType=fitId)
-                return render(request, '', {'downcloth' : downcloth})
-        else :
-            if request.POST['clothType'] == 'up' :
-                upcloth = UpCloth.objects.filter(name=name, multyFitType=fitId)
-                return render(request, '', {"upcloth" : upcloth})
-            elif request.POST['clothType'] == 'down' :
-                downcloth = DownCloth.objects.filter(name=name, multyFitType=fitId)
-                return render(request, '', {'downcloth' :downcloth})
+        cloth = Cloth.objects.filter(name=name, multyFitType=fitId).distinct()
+        context = {'cloth' : cloth }
+        return render(request, "", context)
     else :
         return render(request, "")
 
+def shoppingPage (request) :
+    if request.method == 'POST' :
+        cloths = request.POST['cloths']
+        

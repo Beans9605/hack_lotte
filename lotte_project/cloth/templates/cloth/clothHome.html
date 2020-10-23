@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    information of image
+                </th>
+                <th>
+                    image
+                </th>
+                <th>
+                    brand
+                </th>
+                <th>
+                    price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cloth in cloths %}
+            <tr>
+                {{cloth.pk}}
+            </tr>
+            <tr>
+                {{cloth.name}}
+            </tr>
+            <tr>
+                {{cloth.clothImage.url}}
+                <img src='/media/{{cloth.clothImage}}' alt="{{cloth.clothImage}}">
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
