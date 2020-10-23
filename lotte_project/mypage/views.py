@@ -67,10 +67,7 @@ def login(request): #로그인(최종인)
 
         if check_password(password, user.password):
             request.session['user'] = user.username
-            
             return redirect('detail_custom') #로그인 성공하면 입력한 정보를 뜨게 하고 싶은데 반영된 정보가 안보임
-
-
         else:
             return render(request, "mypage/login.html", {"err": "패스워드가 틀렸습니다."})
 
@@ -100,8 +97,7 @@ def upload(request): #이미지 업로드 테스트(최종인)
     return render(request, 'mypage/index.html', {'form': form})
 
 def detail_custom(request): #내 정보 상세 페이지(채혜민)
-    username = request.user.username 
-    # username을 받아오는 다른 방법?
+    username = request.session['user']
     user = get_object_or_404(CustomUser, username = username)
     context = {'user': user}
     return render(request, "mypage/detail.html", context)
@@ -109,18 +105,15 @@ def detail_custom(request): #내 정보 상세 페이지(채혜민)
 @login_required
 def edit_custom(request): # 내 정보 수정(채혜민)
     # get current user 
-    username = request.user.username
+    username = request.session['user']
     user = get_object_or_404(CustomUser, username = username)
-
     # use ProfileForm
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
+    if request.method == "POST": 
+        form = ProfileForm(request.POST, instance=user)
+        # 수정 사항 입력 시 form이 유효하지 않은 것으로 확인됨(채혜민) -> 해결됨
         if form.is_valid():
-            form.cleaned_data
-            user = form.save()
-            # 이미지 수정 어떻게?
-            # 수정 내용 디테일 페이지에 반영 안됨/모델도 수정 안되는 것으로 확인
-        return redirect('detail_custom')
+            form.save()
+            return redirect('detail_custom')
     else:
         # 기존 instance 받아 돌려주기
         form = ProfileForm(instance=user)
