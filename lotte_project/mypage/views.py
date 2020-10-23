@@ -109,7 +109,8 @@ def detail_custom(request): #내 정보 상세 페이지(채혜민)
 @login_required
 def edit_custom(request): # 내 정보 수정(채혜민)
     # get current user 
-    username = request.session['user']
+    username= request.user.get_username() 
+    #username = request.session['user']
     user = get_object_or_404(CustomUser, username = username)
     # use ProfileForm
     if request.method == "POST": 
