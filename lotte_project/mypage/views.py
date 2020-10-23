@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-# from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password #(최종인)
 from .models import CustomUser #(최종인)
 from .forms import ImageForm, ProfileForm
+from django.contrib.auth import login, authenticate, logout
 
 # Create your views here.
 def home(request):
@@ -32,8 +32,8 @@ def register(request): #회원가입(최종인)
         except CustomUser.DoesNotExist :
             pass
 
-        #if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
-        #    return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})
+        '''if CustomUser.objects.filter(username=username).distinct(): #중복 아이디 존재시 에러(최종인)
+            return render(request, "mypage/register.html", {"err1" : "중복 아이디 존재"})'''
 
         if pwd != c_pwd : #비밀번호 확인 섹션(최종인)
             return render(request, "mypage/register.html", {"err2" : "암호는 서로 일치해야 합니다."})
@@ -57,7 +57,7 @@ def register(request): #회원가입(최종인)
     else: 
         return render(request, "mypage/register.html")
     
-def login(request): #로그인(최종인)
+def user_login(request): #로그인(최종인)
     # 안됨 - 404 /쿼리에 해당하는 객체 없다고 뜸(채혜민) --> 해결됨(최종인)
     if request.method == "POST":
         username = request.POST.get('username')
@@ -66,7 +66,7 @@ def login(request): #로그인(최종인)
         user = get_object_or_404(CustomUser, username = username)
 
         if check_password(password, user.password):
-            request.session['user'] = user.username
+            login(request, user)
             return redirect('detail_custom') #로그인 성공하면 입력한 정보를 뜨게 하고 싶은데 반영된 정보가 안보임
         else:
             return render(request, "mypage/login.html", {"err": "패스워드가 틀렸습니다."})
@@ -74,13 +74,16 @@ def login(request): #로그인(최종인)
     else:
         return render(request, 'mypage/login.html')
 
-def logout(request): #로그아웃(최종인)
-    if request.session.get('user', False) :
-        request.session.modified = True
-        del request.session['user']
-        return redirect("home")
-    else:
-        return redirect("home")
+def user_logout(request): #로그아웃(최종인)
+    logout(request)
+    return redirect("home")
+
+    # if request.session.get('user', False) :
+    #     request.session.modified = True
+    #     del request.session['user']
+    #     return redirect("home")
+    # else:
+    #     return redirect("home")
 
 
 def upload(request): #이미지 업로드 테스트(최종인)
@@ -97,7 +100,8 @@ def upload(request): #이미지 업로드 테스트(최종인)
     return render(request, 'mypage/index.html', {'form': form})
 
 def detail_custom(request): #내 정보 상세 페이지(채혜민)
-    username = request.session['user']
+    username= request.user.get_username() #장고 로그인 기능 활용함으로서 세션으로부터 받아오는 것이 아니라서 수정해줌 (최종인)
+    #username = request.session['user']
     user = get_object_or_404(CustomUser, username = username)
     context = {'user': user}
     return render(request, "mypage/detail.html", context)
