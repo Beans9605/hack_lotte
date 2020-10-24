@@ -27,16 +27,17 @@
 
 
 
-from django.core.signals import request_finished
+from django.core.signals import request_finished, request_started
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 from .models import ViewOfUser
 from mypage.models import CustomUser
-from .views import selectCloth
+from .views import selectCloth, clothHome, clothDone, CallbackCloth
 
-@receiver(request_finished, sender=selectCloth)
+# 사용자 정의 백단
+@receiver(clothDone)
 def callback_to_selectCloth(sender, **kwargs) :
-    if sender.request.method == 'POST' and sender.request.user :
+    if sender == selectCloth :
         view = ViewOfUser.objects.filter(product = sender.cloth)
         if not view :
             user = CustomUser.objects.get(id=sender.request.user.id)
@@ -50,3 +51,10 @@ def callback_to_selectCloth(sender, **kwargs) :
             view.save()
     else :
         pass
+
+
+# 사용자 정의 백단 신호보내기
+@receiver(clothDone)
+def callback_to_clothHome(sender, **kwargs) :
+    if sender == clothHome :
+        print("Success for acception!")
