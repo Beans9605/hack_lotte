@@ -15,7 +15,7 @@ body,html {
   height: 200px;
   position: relative;
   border: 1px solid gray;
-  top: 25%;
+  top: 33%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
