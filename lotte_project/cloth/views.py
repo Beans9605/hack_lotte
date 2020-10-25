@@ -152,22 +152,25 @@ def selectCloth(request, pk) :
 
 # qr코드 확인
 def qr_code_authenticate(request) :
-    img = request.FILES['qr-code']
-    for i in img :
-        print(i)
+    img2 = request.FILES['qr-code']
 
+    byte_img = bytes(0)
+
+    for img3 in img2 :
+        byte_img += img3
+    
+    encoded_img = np.fromstring(byte_img, dtype = np.uint8)
+    img = cv2.imdecode(encoded_img, cv2.IMREAD_COLOR)
     # qr_code = cv2.imread(img, 1)
 
     # plt.imshow(img)
 
-    gray = cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY)
-
-    plt.imshow(gray, cmap='gray')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     decoded = pyzbar.decode(gray)
 
     cloths = []
-    
+
     for d in decoded :
         print(d.data.decode('utf-8'))
         print(d.type)
@@ -178,5 +181,6 @@ def qr_code_authenticate(request) :
         except Cloth.DoesNotExist :
             return redirect('clothHome')
 
+    print(cloths)
     for cloth in cloths :
         return redirect('selectCloth', pk=cloth.pk)
