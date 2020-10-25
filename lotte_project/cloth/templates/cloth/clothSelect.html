@@ -31,9 +31,15 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#">검색 <span class="sr-only">(current)</span></a>
                     </li>
+                    {% if request.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">로그인</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">로그아웃</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">장바구니</a>
                     </li>
@@ -78,7 +84,7 @@
         </div>
         <div class="order_box">
             <blockquote class="blockquote">
-                <p class="mb-0">[헤지스][10/20</br> 브랜드데이][최종혜택가:</br> 42,540원~]베스트셀러 긴팔셔츠</br> 택1</p>
+                <p class="mb-0">[헤지스][10/20</br> 브랜드데이][최종혜택가:</br> 42,540원~]</br> 택1</p>
                 <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite>
                 </footer>
             </blockquote>
