@@ -77,7 +77,7 @@ class Recommend() :
             return None
     
     def recommend_of_best(self) :
-        best_view = ViewOfUser.objects.aggregate(look=Max('look'))
+        best_view = ViewOfUser.objects.all()
         # view = {'best_view' : best_view}
 
         reslook = 0
@@ -111,12 +111,14 @@ def clothHome(request) :
     #     best_views = clothRecommend.recommend_of_best()
     #     context = {'cloths' : cloths, 'user_views' : user_views, 'resently_views' : resently_views, 'best_views' : best_views}
     # else :
-    resently_views = clothRecommend.recommend_of_resently()
-    best_views = clothRecommend.recommend_of_best()
-    context = {'cloths' : cloths, 'resently_views' : resently_views, 'best_views' : best_views}
-
-    CallbackCloth.send_done(clothHome, clothData=context['cloths'])
-    return render(request, "cloth/clothHome.html", context)
+    try :
+        resently_views = clothRecommend.recommend_of_resently()
+        best_views = clothRecommend.recommend_of_best()
+        context = {'cloths' : cloths, 'resently_views' : resently_views, 'best_views' : best_views}
+        return render(request, "cloth/clothHome.html", context)
+    except :
+        context = {'cloths' : cloths}
+        return render(request, "cloth/clothHome.html", context)
 
 # def clothSearch(request) :
 #     if request.method == "POST" :
@@ -151,7 +153,9 @@ def selectCloth(request, pk) :
 # qr코드 확인
 def qr_code_authenticate(request) :
     img = request.FILES['qr-code']
-    print(img)
+    for i in img :
+        print(i)
+
     # qr_code = cv2.imread(img, 1)
 
     # plt.imshow(img)
