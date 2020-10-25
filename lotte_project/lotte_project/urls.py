@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include #(최종인)
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mypage/', include('mypage.urls')), #(최종인)
     path('cloth/', include('cloth.urls')),
+    path('qr_code/', include('qr_code.urls', namespace='qr_code'))
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

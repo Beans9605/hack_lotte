@@ -38,12 +38,12 @@ from .views import selectCloth, clothHome, clothDone, CallbackCloth
 @receiver(clothDone)
 def callback_to_selectCloth(sender, **kwargs) :
     if sender == selectCloth :
-        view = ViewOfUser.objects.filter(product = sender.cloth)
+        view = ViewOfUser.objects.filter(product = kwargs['clothData'])
         if not view :
-            user = CustomUser.objects.get(id=sender.request.user.id)
+            user = CustomUser.objects.get(id=kwargs['user'].id)
             view = ViewOfUser(
                 users = user,
-                product = sender.cloth 
+                product = kwargs['clothData'] 
             )
             view.save()
         else :

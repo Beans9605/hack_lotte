@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+#이미지 파일 건으로 혹시 몰라 써놓음 필요시 주석 제거 필요없을시 삭제ㅠ (최종인)    
 
 # Application definition
 
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'cloth.apps.ClothConfig',
     'mypage.apps.MypageConfig',
     'shopping.apps.ShoppingConfig',
+    'qr_code',
 ]
 
 MIDDLEWARE = [
@@ -124,11 +128,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIR = (
-    os.path.join(BASE_DIR, 'static')
-)
 
+CACHES = {
+    'default' : {
+        'BACKEND' : 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'qr-code' : {
+        'BACKEND' : 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION' : 'qr-code-cache',
+        'TIMEOUT' : 3600
+    }
+}
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
-#이미지 파일 건으로 혹시 몰라 써놓음 필요시 주석 제거 필요없을시 삭제ㅠ (최종인)    
+QR_CODE_CACHE_ALITAS = 'qr-code'
