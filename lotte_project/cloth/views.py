@@ -79,8 +79,19 @@ class Recommend() :
     def recommend_of_best(self) :
         best_view = ViewOfUser.objects.aggregate(look=Max('look'))
         # view = {'best_view' : best_view}
-        if best_view :
-            return best_view
+
+        reslook = 0
+
+        respk = best_view
+
+        for res in best_view :
+            if res.look >= reslook :
+                reslook = res.look
+                respk = res
+
+        
+        if respk :
+            return respk
         else :
             return None
         
