@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Cloth, ViewOfUser
+from .models import Cloth, ViewOfUser, StandardFit_up, StandardFit_down
 # 옷 조회 관리용 시그널
 from django.dispatch import Signal
 # 시간대 별 추천 라인 반환용 모듈
@@ -113,6 +113,7 @@ def clothHome(request) :
     # else :
     try :
         resently_views = clothRecommend.recommend_of_resently()
+        print(resently_views.product.clothImage.url)
         best_views = clothRecommend.recommend_of_best()
         context = {'cloths' : cloths, 'resently_views' : resently_views, 'best_views' : best_views}
         return render(request, "cloth/clothHome.html", context)
@@ -127,7 +128,14 @@ def clothHome(request) :
 def selectCloth(request, pk) :
     try :
         clothData = Cloth.objects.get(pk=pk)
-        context = {'cloth' : clothData }
+        if clothData.sleeveType :
+            StandardFit = StandardFit_up.objects.all()
+        elif clothData.pantsType :
+            StandardFit = StandardFit_down.objects.all()
+        else :
+            redirect('clothHome')
+
+        context = {'cloth' : clothData, 'standardfit' : StandardFit }
         # signal을 이용한 신호를 받아서 데이터 조회 이후에 조회수 및 정보 저장 별도
         CallbackCloth.send_done(selectCloth, clothData=pk)
         return render(request, "cloth/clothSelect.html", context)

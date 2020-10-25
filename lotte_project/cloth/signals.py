@@ -42,12 +42,14 @@ def callback_to_selectCloth(sender, **kwargs) :
         try :
             view = ViewOfUser.objects.get(product = kwargs['clothData'])
             view.look += 1
+            print('success look now')
             view.save()
         except ViewOfUser.DoesNotExist :
             view = ViewOfUser(
                 look=1,
                 product = Cloth.objects.get(pk=kwargs['clothData'])
             )
+            print('success look')
             view.save()
 
     else :

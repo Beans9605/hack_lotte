@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mypage/', include('mypage.urls')), #(최종인)
-    path('cloth/', include('cloth.urls')),
+    path('', include('cloth.urls')),
     path('qr_code/', include('qr_code.urls', namespace='qr_code'))
 ]
 if settings.DEBUG:

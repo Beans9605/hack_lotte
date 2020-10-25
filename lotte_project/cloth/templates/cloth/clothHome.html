@@ -18,14 +18,14 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">입어보기</a>
+  <a class="navbar-brand" href="{% url 'clothHome' %}">입어보기</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'clothHome' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">logout</a>
@@ -63,18 +63,18 @@
     </div>
     <div class="selected_pd" id="selected_pd">
       <img class="slide2_img"src="{{ select.clothImage.url }}" alt="" id="photo2">
-      <p class="price">선택1 [{{ select.price }}]</p>
+      <!-- <p class="price">선택1 [{{ select.price }}]</p> -->
       <div class="btn-group">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           SIZE
-        </button>
+        </button> -->
         <div class="dropdown-menu dropdown-menu-right">
-          {% if select.sleeveType == true %}
+          {% if select.sleeveType %}
             {% for size in select.multyFitTypeSleeve.size %}
               <button class="dropdown-item" type="button">
                 상의 &nbsp;{{ size }}</button>
             {% endfor %}
-          {% elif select.pantsType == true %}
+          {% elif select.pantsType %}
             {% for size in select.multyFitTypeSleeve.size %}
               <button class="dropdown-item" type="button">
                 하의 &nbsp;{{ size }}</button>
@@ -97,7 +97,7 @@
       <div class="slideWrap multipleWrap2" id="click2">
         <ul class="multiple_slider2">
             <li><a href="">
-              <img src="{{ recently_views.product.clothImage.url }}" alt="connect"></a>
+              <img src="{{ resently_views.product.clothImage.url }}" alt="connect"></a>
             </li>
         </ul>
       </div>
@@ -116,7 +116,8 @@
     <button type="button" class="btn btn-secondary btn-lg btn-block">바로 구매하기</button>
 
     <br>
-    <div>
+    <div style="display: flex; justify-content: center; align-items: center; ">
+      <div style="display: flex; flex-direction: column;">
         <h3>QR코드 인식</h3>
         <p>롯데 백화점 의류 매장 안에 있는 의류의 qr코드를 찍어보세요!</p>
         <p>
@@ -127,6 +128,7 @@
         </form>
         </p>
         </select>
+      </div>
       </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
