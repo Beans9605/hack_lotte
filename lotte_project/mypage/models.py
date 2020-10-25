@@ -7,8 +7,11 @@ class CustomUser (AbstractUser) :
     face_img = models.ImageField() 
     weight = models.CharField(max_length=20)
     height = models.CharField(max_length=20)
-    fit = models.CharField(max_length=10)
-    faceLength = models.FloatField(default=22.9)
+    address1 = models.TextField(max_length=20)
+    address2 = models.TextField(max_length=20)
+    #fit = models.CharField(max_length=10)
+    #faceLength = models.FloatField(default=22.9)
+
 
 class Image(models.Model): #이미지 업로드 테스트용 
     title = models.CharField(max_length=200)

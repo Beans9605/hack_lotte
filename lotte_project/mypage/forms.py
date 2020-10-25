@@ -19,6 +19,8 @@ class ProfileForm(forms.ModelForm):
             "face_img",
             "weight",
             "height",
-            "fit",
-            "faceLength",
+            "address1",
+            "address2",
+            #"fit",
+            #"faceLength",
         ]

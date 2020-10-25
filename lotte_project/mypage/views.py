@@ -19,8 +19,10 @@ def register(request): #회원가입(최종인)
         c_pwd = request.POST['check_password']
         weight = request.POST['weight']  #weight부터 faceLength까지 어떻게 처리해야할지 고민 중(최종인)
         height = request.POST['height']
-        fit = request.POST['fit']
-        faceLength= request.POST['faceLength']
+        address1 = request.POST['address1']
+        address2 = request.POST['address2']
+        #fit = request.POST['fit']
+        #faceLength= request.POST['faceLength']
         #face_img=request.POST['face_img'] #여기에 사진 업로드 하는거를 아직 고민 중(최종인)
         
         #예외 처리
@@ -45,8 +47,10 @@ def register(request): #회원가입(최종인)
             email = email,
             weight = weight,
             height = height,
-            fit = fit,
-            faceLength = faceLength,
+            address1 = address1,
+            address2 = address2,
+            #fit = fit,
+            #faceLength = faceLength,
             #face_img = face_img
         )
         customUser.set_password(pwd) #암호화해서 저장(해쉬...?(최종인))
