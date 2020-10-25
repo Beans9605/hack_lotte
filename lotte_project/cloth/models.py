@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.deletion import SET_NULL
+from django.db.models.fields import BLANK_CHOICE_DASH
 from mypage.models import CustomUser
 from django.utils import timezone
 # Create your models here.
@@ -41,11 +42,11 @@ class Cloth(models.Model) :
     name = models.CharField(max_length=20, unique=True)
     clothImage = models.ImageField(upload_to='cloth/', null=True, blank=True)
     price = models.FloatField(default=0, null=True, blank=True)
-    multyFitType = models.ManyToManyField(StandardFit_down)
+    multyFitTypePants = models.ManyToManyField(StandardFit_down, null=True, blank=True)
+    multyFitTypeSleeve = models.ManyToManyField(StandardFit_up, null=True, blank=True)
 
 
 class ViewOfUser(models.Model) : 
     look = models.IntegerField(default=0)
-    users = models.ManyToManyField(CustomUser)
     resently = models.DateTimeField(auto_now=True)
-    product = models.ManyToManyField(Cloth)
+    product = models.ForeignKey(Cloth, on_delete=models.CASCADE)

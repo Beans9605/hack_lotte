@@ -2,14 +2,16 @@
 {% load qr_code %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>옷 고르기 홈</title>
 </head>
+
 <body>
-    
-    
+
+
     <table>
         <thead>
             <tr>
@@ -37,6 +39,9 @@
             </tr>
             <tr>
                 {{cloth.name}}
+                {% if resently_views %}
+                {{resently_views.product.name}}
+                {% endif %}
             </tr>
             <tr>
                 {% qr_from_text cloth.pk %}
@@ -50,28 +55,17 @@
     </table>
     <div>
         <h3>QR코드 인식</h3>
-        <select class ='main-content'>
-            <form method="POST" action="{% url 'qrcode_auth' %}" enctype="multipart/form-data"> 
-                {% csrf_token %}
-            <p>롯데 백화점 의류 매장 안에 있는 의류의 qr코드를 찍어보세요!</p>
-            <p>
-                
-                    
-                    <input type="file" id="take-picture" accept="image/*">
-                    <button type="submit">submit</button>
-                
-            </p>
+        <p>롯데 백화점 의류 매장 안에 있는 의류의 qr코드를 찍어보세요!</p>
+        <p>
+        <form method="POST" action="{% url 'qrcode_auth' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" id="take-picture" name='qr-code' accept="image/*">
+            <button type="submit">submit</button>
         </form>
-            <h4>
-                Preview
-            </h4>
-            <p>
-                <img src="about:blank" alt="" id="show-picture">
-            </p>
-            <p id="error"></p>
+        </p>
         </select>
     </div>
-    <script src="{% static 'cloth/js/camera.js' %}"></script>
 
 </body>
+
 </html>

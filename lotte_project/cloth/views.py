@@ -11,7 +11,7 @@ from django.db.models import Max
 import pyzbar.pyzbar as pyzbar
 import cv2
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 # ----------------------------------------------- 옷 종류 검색 ---------
 import sys
@@ -44,8 +44,8 @@ clothDone = Signal()
 # 콜백함수
 class CallbackCloth :
 
-    def send_done(self, clothData, user) :
-        clothDone.send(sender=self, clothData=clothData, user=user)
+    def send_done(self, clothData) :
+        clothDone.send(sender=self, clothData=clothData)
 
 
 # 추천 알고리즘
@@ -54,12 +54,25 @@ class Recommend() :
     def recommend_of_resently(self) :
         now_date = datetime.datetime.now()
         resently_days = now_date + timedelta(days=-7)
-        resently_view = ViewOfUser.objects.filter(resently__range =[resently_days, now_date]).aggregate(look=Max('look'))
+        resently_view = ViewOfUser.objects.filter(resently__range =[resently_days, now_date])
 
+        reslook = 0
+
+        respk = resently_view
+
+        for res in resently_view :
+            if res.look >= reslook :
+                reslook = res.look
+                respk = res
+        
+        
+        
+            
+        
         # view = {'resently_view' : resently_view}
 
-        if resently_view :
-            return resently_view
+        if respk :
+            return respk
         else :
             return None
     
@@ -74,34 +87,36 @@ class Recommend() :
 
 # Create your views here.
 
+
+# 홈 화면에서는 모든 옷들을 보여주고, 하단에 추천 옷을 골라준다.
 def clothHome(request) :
     cloths = Cloth.objects.all()
-
     clothRecommend = Recommend()
 
-    if request.user :
-        user_views = ViewOfUser.objects.filter(users=request.user)
-        resently_views = clothRecommend.recommend_of_resently()
-        best_views = clothRecommend.recommend_of_best()
-        context = {'cloths' : cloths, 'user_views' : user_views, 'resently_views' : resently_views, 'best_views' : best_views}
-    else :
-        resently_views = clothRecommend.recommend_of_resently()
-        best_views = clothRecommend.recommend_of_best()
-        context = {'cloths' : cloths, 'resently_views' : resently_views, 'best_views' : best_views}
+    # if request.user :
+    #     print(request.user.id)
+    #     user_views = ViewOfUser.objects.filter(users=request.user)
+    #     resently_views = clothRecommend.recommend_of_resently()
+    #     best_views = clothRecommend.recommend_of_best()
+    #     context = {'cloths' : cloths, 'user_views' : user_views, 'resently_views' : resently_views, 'best_views' : best_views}
+    # else :
+    resently_views = clothRecommend.recommend_of_resently()
+    best_views = clothRecommend.recommend_of_best()
+    context = {'cloths' : cloths, 'resently_views' : resently_views, 'best_views' : best_views}
 
-    CallbackCloth.send_done(clothHome, clothData=context, user=None)
+    CallbackCloth.send_done(clothHome, clothData=context['cloths'])
     return render(request, "cloth/clothHome.html", context)
 
 # def clothSearch(request) :
 #     if request.method == "POST" :
 
-
+# 셀렉하게 되면 자동적으로 뷰를 생성해주고, 디테일한 화면을 띄워준다.
 def selectCloth(request, pk) :
     try :
         clothData = Cloth.objects.get(pk=pk)
         context = {'cloth' : clothData }
         # signal을 이용한 신호를 받아서 데이터 조회 이후에 조회수 및 정보 저장 별도
-        CallbackCloth.send_done(selectCloth, clothData=clothData, user=request.user)
+        CallbackCloth.send_done(selectCloth, clothData=pk)
         return render(request, "cloth/clothSelect.html", context)
     except Cloth.DoesNotExist :
         return redirect('clothHome')
@@ -122,21 +137,22 @@ def selectCloth(request, pk) :
     
 #     return redirect('clothHome')
 
-
+# qr코드 확인
 def qr_code_authenticate(request) :
     img = request.FILES['qr-code']
-    qr_code = cv2.imread(img)
+    print(img)
+    # qr_code = cv2.imread(img, 1)
 
-    plt.imshow(img)
+    # plt.imshow(img)
 
-    gray = cv2.cvtColor(qr_code, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY)
 
     plt.imshow(gray, cmap='gray')
 
     decoded = pyzbar.decode(gray)
 
     cloths = []
-
+    
     for d in decoded :
         print(d.data.decode('utf-8'))
         print(d.type)

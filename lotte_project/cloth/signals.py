@@ -30,7 +30,7 @@
 from django.core.signals import request_finished, request_started
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
-from .models import ViewOfUser
+from .models import ViewOfUser, Cloth
 from mypage.models import CustomUser
 from .views import selectCloth, clothHome, clothDone, CallbackCloth
 
@@ -38,17 +38,18 @@ from .views import selectCloth, clothHome, clothDone, CallbackCloth
 @receiver(clothDone)
 def callback_to_selectCloth(sender, **kwargs) :
     if sender == selectCloth :
-        view = ViewOfUser.objects.filter(product = kwargs['clothData'])
-        if not view :
-            user = CustomUser.objects.get(id=kwargs['user'].id)
-            view = ViewOfUser(
-                users = user,
-                product = kwargs['clothData'] 
-            )
-            view.save()
-        else :
+        print(kwargs['clothData'])
+        try :
+            view = ViewOfUser.objects.get(product = kwargs['clothData'])
             view.look += 1
             view.save()
+        except ViewOfUser.DoesNotExist :
+            view = ViewOfUser(
+                look=1,
+                product = Cloth.objects.get(pk=kwargs['clothData'])
+            )
+            view.save()
+
     else :
         pass
 
